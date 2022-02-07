@@ -5,23 +5,30 @@ using UnityEngine;
 public class AttackController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private Weapon weapon;
+    [SerializeField] private AudioSource attackSound;
 
-    private bool _isAttack;
-
-    public bool IsAttack { get => _isAttack; }
+    private bool _canAttack = true;
 
     public void FinishAttack()
     {
-        _isAttack = false;
+        _canAttack = true;
     }
-    
 
-    private void Update()
+    //private void Update() νΰ οκ
+    //{
+    //    if (Input.GetMouseButtonDown(0) && _canAttack)
+    //    {
+    //        Attack();
+    //   }
+    //}
+
+    public void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _isAttack = true;
-            animator.SetTrigger("attack");
-        }
+        _canAttack = false;
+        weapon.EnemyInRange();
+        animator.SetTrigger("attack");
+        attackSound.Play();
     }
 }
+

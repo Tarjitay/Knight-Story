@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LeverArm : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
     private Finish _finish;
 
     private void Start()
@@ -12,6 +13,7 @@ public class LeverArm : MonoBehaviour
     }
     public void ActivateLeverArm()
     {
+        animator.SetTrigger("activate");
         _finish.Activate();
     }
 }

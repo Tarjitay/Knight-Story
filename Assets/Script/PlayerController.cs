@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speedX = -1f;
     [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private FixedJoystick fixedJoystick;
     const float speedXMultiplier = 50f;
 
     private float _horizontal;
@@ -29,21 +31,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _horizontal = Input.GetAxis("Horizontal");
+        //_horizontal = Input.GetAxis("Horizontal"); для пк
+        _horizontal = fixedJoystick.Horizontal;
         animator.SetFloat("speedX", Mathf.Abs(_horizontal));
-        if (Input.GetKey(KeyCode.W) && _isGround)
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            _isJump = true;
+            Jump();
         }
         if (Input.GetKeyDown(KeyCode.F))
-            if (_isFinish)
-            {
-                _finish.FinishLevel();
-            }
-            if (_isLeverArm) 
-            {
-                _leverArm.ActivateLeverArm();
-            }        
+        {
+            Interact();
+        }               
     }
 
     private void FixedUpdate()
@@ -75,6 +73,28 @@ public class PlayerController : MonoBehaviour
         Vector3 playerScale = transform.localScale;
         playerScale.x *= -1;
         transform.localScale = playerScale;
+    }
+
+    public void Jump()
+    {
+        if (_isGround)
+        {
+            _isJump = true;
+            jumpSound.Play();
+        }
+        
+    }
+
+    public void Interact()
+    {
+        if (_isFinish)
+        {
+            _finish.FinishLevel();
+        }
+        if (_isLeverArm)
+        {
+            _leverArm.ActivateLeverArm();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
